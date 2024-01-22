@@ -1,0 +1,61 @@
+version: '3'
+services:
+  app:
+    container_name: setup-go
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    networks:
+      - setup-network
+    ports:
+      - 8080:8080
+    # environment:
+    #   - APP_PORT=$APP_PORT
+    #   - DB_HOST=$DB_HOST
+    #   - DB_PORT=$DB_PORT
+    #   - DB_USERNAME=$DB_USERNAME
+    #   - DB_PASSWORD=$DB_PASSWORD
+    #   - DB_DATABASE=$DB_DATABASE
+    depends_on:
+      - mysql
+
+  mysql:
+    container_name: setup-mysql1
+    image: mysql:8.0
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    tty: true
+    volumes:
+      - setup-data:/var/lib/mysql/
+      - ./docker/mysql/my.cnf:/etc/mysql/my.cnf
+    networks:
+      - setup-network
+    ports:
+      - '3306:3306'
+    environment:
+      MYSQL_DATABASE: golang
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+
+  phpmyadmin:
+      container_name: setup-phpmyadmin1
+      image: phpmyadmin:5.2
+      restart: always
+      ports:
+        - '8888:80'
+      networks:
+        - setup-network
+      environment:
+        PMA_HOST: setup-mysql1
+      depends_on:
+        - mysql
+
+networks:
+  setup-network:
+    driver: bridge
+
+volumes:
+  setup-data:
+    driver: local
