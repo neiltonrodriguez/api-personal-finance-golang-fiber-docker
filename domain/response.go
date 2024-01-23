@@ -11,8 +11,8 @@ type Response struct {
 }
 
 type ResponseCheck struct {
-	Check bool      `json:"check,omitempty"`
-	Data     interface{} `json:"data,omitempty"`
+	Check bool        `json:"check,omitempty"`
+	User  interface{} `json:"user,omitempty"`
 }
 
 type Authorization struct {

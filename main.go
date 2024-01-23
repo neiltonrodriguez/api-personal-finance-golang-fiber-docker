@@ -14,7 +14,6 @@ import (
 func main() {
 	app := fiber.New()
 	domain.GlobalConfig.LoadVariables()
-	// app.Get("/", HelloHandler)
 
 	UserRouter.RegisterRoutes(app)
 	AccountRouter.RegisterRoutes(app)
@@ -23,7 +22,3 @@ func main() {
 	CheckRouter.RegisterRoutes(app)
 	app.Listen(":8080")
 }
-
-// func HelloHandler(c *fiber.Ctx) error {
-// 	return c.SendString("Hello, World!sssss")
-// }
