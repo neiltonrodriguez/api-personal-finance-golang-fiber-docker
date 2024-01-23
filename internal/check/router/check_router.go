@@ -2,7 +2,7 @@ package router
 
 import (
 	"personal-finance-api/domain"
-	"personal-finance-api/internal/transaction/handler"
+	"personal-finance-api/internal/check/handler"
 	"personal-finance-api/middlewares"
 
 	jwtware "github.com/gofiber/contrib/jwt"
@@ -18,7 +18,7 @@ func RegisterRoutes(
 		SigningKey: jwtware.SigningKey{Key: []byte(domain.GlobalConfig.JwtSecretKey)}})
 
 	route := app.Group(
-		"v1/transaction",
+		"v1/check",
 		middlewares.Restricted,
 	)
 
@@ -26,24 +26,8 @@ func RegisterRoutes(
 
 	route.Use(config)
 
-	route.Get("/", func(fiberCtx *fiber.Ctx) error {
-		return handler.Get(fiberCtx)
-	})
-
-	route.Get("/:id", func(fiberCtx *fiber.Ctx) error {
-		return handler.GetById(fiberCtx)
-	})
-
-	route.Put("/:id", func(fiberCtx *fiber.Ctx) error {
-		return handler.Update(fiberCtx)
-	})
-
 	route.Post("/", func(fiberCtx *fiber.Ctx) error {
-		return handler.Create(fiberCtx)
-	})
-
-	route.Delete("/:id", func(fiberCtx *fiber.Ctx) error {
-		return handler.Delete(fiberCtx)
+		return handler.CheckToken(fiberCtx)
 	})
 
 }

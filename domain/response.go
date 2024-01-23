@@ -10,6 +10,11 @@ type Response struct {
 	Error interface{} `json:"errors,omitempty"`
 }
 
+type ResponseCheck struct {
+	Check bool      `json:"check,omitempty"`
+	Data     interface{} `json:"data,omitempty"`
+}
+
 type Authorization struct {
 	Token string      `json:"token"`
 	Data  interface{} `json:"data,omitempty"`
@@ -18,6 +23,10 @@ type Authorization struct {
 type Meta struct {
 	Count      int                 `json:"count"`
 	Pagination *paginationResponse `json:"pagination,omitempty"`
+}
+
+type Check struct {
+	Status bool `json:"status"`
 }
 
 type LegacyResponse struct {

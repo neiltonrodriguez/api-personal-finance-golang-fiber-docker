@@ -7,6 +7,7 @@ import (
 
 	jwtware "github.com/gofiber/contrib/jwt"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 )
 
 func RegisterRoutes(
@@ -20,6 +21,8 @@ func RegisterRoutes(
 		"v1/account",
 		middlewares.Restricted,
 	)
+
+	route.Use(cors.New())
 
 	route.Use(config)
 

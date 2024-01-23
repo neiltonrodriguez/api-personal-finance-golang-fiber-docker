@@ -43,3 +43,10 @@ func SignIn(ctx context.Context, email, password string) (string, domain.User, e
 	user.Password = ""
 	return t, user, nil
 }
+
+func CheckToken(ctx context.Context) (bool, error) {
+
+	// idm := ctx.Value("token")
+	// user, err := UserModel.GetById()
+	return true, nil
+}

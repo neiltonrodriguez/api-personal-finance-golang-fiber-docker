@@ -7,6 +7,7 @@ import (
 
 	jwtware "github.com/gofiber/contrib/jwt"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 )
 
 func RegisterRoutes(
@@ -21,6 +22,18 @@ func RegisterRoutes(
 		middlewares.Restricted,
 	)
 
+	route.Use(cors.New())
+
+	route.Post("/", func(fiberCtx *fiber.Ctx) error {
+		return handler.Create(fiberCtx)
+	})
+
+	route.Use(config)
+
+	route.Get("/", func(fiberCtx *fiber.Ctx) error {
+		return handler.Get(fiberCtx)
+	})
+
 	route.Get("/", func(fiberCtx *fiber.Ctx) error {
 		return handler.Get(fiberCtx)
 	})
@@ -32,12 +45,6 @@ func RegisterRoutes(
 	route.Put("/:id", func(fiberCtx *fiber.Ctx) error {
 		return handler.Update(fiberCtx)
 	})
-
-	route.Post("/", func(fiberCtx *fiber.Ctx) error {
-		return handler.Create(fiberCtx)
-	})
-
-	route.Use(config)
 
 	route.Delete("/:id", func(fiberCtx *fiber.Ctx) error {
 		return handler.Delete(fiberCtx)
