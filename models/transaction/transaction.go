@@ -29,7 +29,7 @@ func Get(ctx context.Context) ([]domain.TransactionOutput, error) {
 		t.title, 
 		t.value, 
 		c.title, 
-		type.title 
+		type.title, 
 		t.created_at, 
 		t.updated_at 
 	FROM transaction t
