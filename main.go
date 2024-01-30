@@ -3,6 +3,7 @@ package main
 import (
 	"personal-finance-api/domain"
 	AccountRouter "personal-finance-api/internal/account/router"
+	CategoryRouter "personal-finance-api/internal/category/router"
 	CheckRouter "personal-finance-api/internal/check/router"
 	LoginRouter "personal-finance-api/internal/login/router"
 	TransactionRouter "personal-finance-api/internal/transaction/router"
@@ -18,6 +19,7 @@ func main() {
 
 	UserRouter.RegisterRoutes(app)
 	AccountRouter.RegisterRoutes(app)
+	CategoryRouter.RegisterRoutes(app)
 	TransactionRouter.RegisterRoutes(app)
 	TransactionTypeRouter.RegisterRoutes(app)
 	LoginRouter.RegisterRoutes(app)

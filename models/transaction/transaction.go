@@ -16,11 +16,18 @@ var (
 	errTransactionNotFound = errors.New("transaction not found")
 )
 
-func Get(ctx context.Context) ([]domain.TransactionOutput, error) {
+func Get(ctx context.Context, typeTransaction string) ([]domain.TransactionOutput, error) {
 	var err error
 	Db, err = database.ConnectToDB()
 	if err != nil {
 		return nil, err
+	}
+
+	args := []interface{}{}
+	conditions := ""
+	if len(typeTransaction) > 0 {
+		conditions = "WHERE type.title = ?"
+		args = append(args, typeTransaction)
 	}
 
 	rows, err := Db.Query(`
@@ -34,7 +41,8 @@ func Get(ctx context.Context) ([]domain.TransactionOutput, error) {
 		t.updated_at 
 	FROM transaction t
 	LEFT JOIN category c ON t.category_id = c.id
-	LEFT JOIN transaction_type type ON t.type_transaction_id = type.id`)
+	LEFT JOIN transaction_type type ON t.type_transaction_id = type.id
+	`+conditions, args...)
 	if err != nil {
 		return nil, err
 	}

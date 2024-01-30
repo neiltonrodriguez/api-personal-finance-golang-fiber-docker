@@ -85,8 +85,8 @@ func Get(ctx context.Context) ([]domain.AccountOutput, error) {
 		a.id, 
 		a.title, 
 		a.balance,
-		t.title,
-		b.title,  
+		COALESCE(t.title, ''),
+		COALESCE(b.title, ''),  
 		created_at, 
 		updated_at 
 	FROM account a

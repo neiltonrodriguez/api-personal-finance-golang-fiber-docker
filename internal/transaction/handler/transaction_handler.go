@@ -14,13 +14,31 @@ func Get(fiberCtx *fiber.Ctx) error {
 
 	ctx := fiberCtx.Context()
 
-	result, err := TransactionModel.Get(ctx)
+	typeTransaction := fiberCtx.Query("type", "")
+
+	result, err := TransactionModel.Get(ctx, typeTransaction)
 	if err != nil {
 		return fiber.NewError(fiber.StatusBadRequest, err.Error())
 	}
 	return fiberCtx.Status(fiber.StatusOK).JSON(domain.Response{
 		Meta: domain.Meta{
 			Count: len(result),
+		},
+		Data: result,
+	})
+}
+
+func GetTransactionTotal(fiberCtx *fiber.Ctx) error {
+
+	ctx := fiberCtx.Context()
+
+	result, err := TransactionModel.GetTransactionTotal(ctx)
+	if err != nil {
+		return fiber.NewError(fiber.StatusBadRequest, err.Error())
+	}
+	return fiberCtx.Status(fiber.StatusOK).JSON(domain.Response{
+		Meta: domain.Meta{
+			Count: 1,
 		},
 		Data: result,
 	})

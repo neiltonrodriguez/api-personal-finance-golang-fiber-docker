@@ -2,7 +2,7 @@ package router
 
 import (
 	"personal-finance-api/domain"
-	"personal-finance-api/internal/transaction/handler"
+	"personal-finance-api/internal/category/handler"
 	"personal-finance-api/middlewares"
 
 	jwtware "github.com/gofiber/contrib/jwt"
@@ -18,7 +18,7 @@ func RegisterRoutes(
 		SigningKey: jwtware.SigningKey{Key: []byte(domain.GlobalConfig.JwtSecretKey)}})
 
 	route := app.Group(
-		"v1/transaction",
+		"v1/category",
 		middlewares.Restricted,
 	)
 
@@ -30,24 +30,20 @@ func RegisterRoutes(
 		return handler.Get(fiberCtx)
 	})
 
-	route.Get("/total", func(fiberCtx *fiber.Ctx) error {
-		return handler.GetTransactionTotal(fiberCtx)
-	})
+	// route.Get("/:id", func(fiberCtx *fiber.Ctx) error {
+	// 	return handler.GetById(fiberCtx)
+	// })
 
-	route.Get("/:id", func(fiberCtx *fiber.Ctx) error {
-		return handler.GetById(fiberCtx)
-	})
+	// route.Put("/:id", func(fiberCtx *fiber.Ctx) error {
+	// 	return handler.Update(fiberCtx)
+	// })
 
-	route.Put("/:id", func(fiberCtx *fiber.Ctx) error {
-		return handler.Update(fiberCtx)
-	})
+	// route.Post("/", func(fiberCtx *fiber.Ctx) error {
+	// 	return handler.Create(fiberCtx)
+	// })
 
-	route.Post("/", func(fiberCtx *fiber.Ctx) error {
-		return handler.Create(fiberCtx)
-	})
-
-	route.Delete("/:id", func(fiberCtx *fiber.Ctx) error {
-		return handler.Delete(fiberCtx)
-	})
+	// route.Delete("/:id", func(fiberCtx *fiber.Ctx) error {
+	// 	return handler.Delete(fiberCtx)
+	// })
 
 }
