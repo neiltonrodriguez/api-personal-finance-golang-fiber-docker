@@ -1,4 +1,4 @@
-package transaction_type
+package payment_type
 
 import (
 	"context"
@@ -9,7 +9,7 @@ import (
 
 var Db *sql.DB
 
-func Get(ctx context.Context) (domain.TransactionTypes, error) {
+func Get(ctx context.Context) (domain.PaymentTypes, error) {
 	var err error
 	Db, err = database.ConnectToDB()
 	if err != nil {
@@ -21,26 +21,26 @@ func Get(ctx context.Context) (domain.TransactionTypes, error) {
 		t.id, 
 		t.title, 
 		COALESCE(t.description, '')  
-	FROM transaction_type t`)
+	FROM payment_type t`)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 
-	var transactionsTypes domain.TransactionTypes
+	var paymentTypes domain.PaymentTypes
 	for rows.Next() {
-		var transactionType domain.TransactionType
+		var paymentType domain.PaymentType
 		err := rows.Scan(
-			&transactionType.Id,
-			&transactionType.Title,
-			&transactionType.Descritpion)
+			&paymentType.Id,
+			&paymentType.Title,
+			&paymentType.Descritpion)
 		if err != nil {
 			return nil, err
 		}
-		transactionsTypes = append(transactionsTypes, transactionType)
+		paymentTypes = append(paymentTypes, paymentType)
 	}
 
-	return transactionsTypes, nil
+	return paymentTypes, nil
 }
 
 // func Create(ctx context.Context, t domain.TransactionInput) (domain.TransactionOutput, error) {
