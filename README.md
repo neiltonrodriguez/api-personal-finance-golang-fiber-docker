@@ -18,6 +18,8 @@ JWT token
 na primeira vez, use:
 ```
 # docker-compose up -d --build
+# renomei o arquivo .env-example para .env
+# acesse o phpMyAdmin em(http://localhost:8888/) e execute o script sql que está dentro de ./sql/bd.sql para criar as tabelas
 ```
 
 
