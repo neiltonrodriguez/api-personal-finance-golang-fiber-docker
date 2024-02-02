@@ -27,8 +27,8 @@ type TransactionInput struct {
 }
 
 type TransactionTotal struct {
-	In  float64 `json:"total_in"`
-	Out float64 `json:"total_out"`
+	In  float64 `json:"total_in,omitempty"`
+	Out float64 `json:"total_out,omitempty"`
 }
 
 type TransactionOutput struct {

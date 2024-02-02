@@ -42,7 +42,7 @@ func Get(ctx context.Context, typeTransaction string) ([]domain.TransactionOutpu
 	FROM transaction t
 	LEFT JOIN category c ON t.category_id = c.id
 	LEFT JOIN transaction_type type ON t.type_transaction_id = type.id
-	`+conditions, args...)
+	ORDER BY t.created_at DESC`+conditions, args...)
 	if err != nil {
 		return nil, err
 	}
@@ -199,8 +199,8 @@ func GetTransactionTotal(ctx context.Context) (domain.TransactionTotal, error) {
 
 	rows, err := Db.Query(`
 	SELECT
-	SUM(CASE WHEN t.type_transaction_id = 2 THEN t.value ELSE 0 END) AS total_in,
-	SUM(CASE WHEN t.type_transaction_id = 1 THEN t.value ELSE 0 END) AS total_out
+	COALESCE(SUM(CASE WHEN t.type_transaction_id = 2 THEN t.value ELSE 0 END), 0) AS total_in,
+	COALESCE(SUM(CASE WHEN t.type_transaction_id = 1 THEN t.value ELSE 0 END), 0) as total_out
 	FROM transaction t`)
 	if err != nil {
 		return domain.TransactionTotal{}, err

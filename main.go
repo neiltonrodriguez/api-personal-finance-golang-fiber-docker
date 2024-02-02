@@ -5,6 +5,7 @@ import (
 	AccountRouter "personal-finance-api/internal/account/router"
 	CategoryRouter "personal-finance-api/internal/category/router"
 	CheckRouter "personal-finance-api/internal/check/router"
+	ConditionRouter "personal-finance-api/internal/condition/router"
 	LoginRouter "personal-finance-api/internal/login/router"
 	PaymentTypeRouter "personal-finance-api/internal/payment_type/router"
 	TransactionRouter "personal-finance-api/internal/transaction/router"
@@ -26,5 +27,6 @@ func main() {
 	PaymentTypeRouter.RegisterRoutes(app)
 	LoginRouter.RegisterRoutes(app)
 	CheckRouter.RegisterRoutes(app)
+	ConditionRouter.RegisterRoutes(app)
 	app.Listen(":8080")
 }
