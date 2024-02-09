@@ -21,7 +21,7 @@ func GetUserByEmail(ctx context.Context, email string) (domain.User, error) {
 		return domain.User{}, err
 	}
 
-	rows, err := Db.Query(`SELECT id, name, email, password, phone, created_at, updated_at FROM users WHERE email = ? limit 1`, email)
+	rows, err := Db.Query(`SELECT id, name, email, password, phone, created_at, updated_at FROM golang.users WHERE email = ? limit 1`, email)
 	if err != nil {
 		return domain.User{}, err
 	}

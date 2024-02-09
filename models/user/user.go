@@ -37,7 +37,7 @@ func Get(ctx context.Context) ([]domain.User, error) {
 		COALESCE('number', ''), 
 		created_at, 
 		updated_at 
-	FROM users`)
+	FROM golang.users`)
 	if err != nil {
 		return nil, err
 	}
@@ -160,7 +160,7 @@ func GetById(ctx context.Context, id int) (domain.User, error) {
 		COALESCE('number', ''), 
 		created_at, 
 		updated_at  
-	FROM users WHERE id = ? limit 1`, id)
+	FROM golang.users WHERE id = ? limit 1`, id)
 	if err != nil {
 		return domain.User{}, err
 	}
@@ -199,7 +199,7 @@ func Delete(ctx context.Context, id int) error {
 		return err
 	}
 
-	query := `DELETE FROM users WHERE id = ?`
+	query := `DELETE FROM golang.users WHERE id = ?`
 
 	_, err = Db.ExecContext(ctx, query, id)
 	if err != nil {

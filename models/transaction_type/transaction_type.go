@@ -21,7 +21,7 @@ func Get(ctx context.Context) (domain.TransactionTypes, error) {
 		t.id, 
 		t.title, 
 		COALESCE(t.description, '')  
-	FROM transaction_type t`)
+	FROM golang.transaction_type t`)
 	if err != nil {
 		return nil, err
 	}
@@ -111,59 +111,41 @@ func Get(ctx context.Context) (domain.TransactionTypes, error) {
 // 	return nil
 // }
 
-// func GetById(ctx context.Context, id int) (domain.TransactionOutput, error) {
-// 	var err error
-// 	Db, err = database.ConnectToDB()
-// 	if err != nil {
-// 		return domain.TransactionOutput{}, err
-// 	}
+func GetById(ctx context.Context, id int) (domain.TransactionType, error) {
+	var err error
+	Db, err = database.ConnectToDB()
+	if err != nil {
+		return domain.TransactionType{}, err
+	}
 
-// 	rows, err := Db.Query(`
-// 	SELECT
-// 		t.id,
-// 		t.title,
-// 		t.value,
-// 		c.title,
-// 		co.title,
-// 		tt.title,
-// 		p.title,
-// 		COALESCE(t.description, ""),
-// 		t.created_at,
-// 		t.updated_at
-// 	FROM finance.transaction t
-// 	LEFT JOIN finance.category c ON t.category_id = c.id
-// 	LEFT JOIN finance.transaction_type tt ON t.type_transaction_id = tt.id
-// 	LEFT JOIN finance.payment_type p ON t.type_payment_id = p.id
-// 	LEFT JOIN finance.condition co ON t.condition_id = co.id
-// 	WHERE t.id = ? LIMIT 1`, id)
-// 	if err != nil {
-// 		return domain.TransactionOutput{}, err
-// 	}
+	rows, err := Db.Query(`
+	SELECT 
+		t.id, 
+		t.title, 
+		COALESCE(t.description, '')  
+	FROM golang.transaction_type t
+	WHERE t.id = ? LIMIT 1`, id)
+	if err != nil {
+		return domain.TransactionType{}, err
+	}
 
-// 	defer rows.Close()
+	defer rows.Close()
 
-// 	rowExist := rows.Next()
-// 	if !rowExist {
-// 		return domain.TransactionOutput{}, errTransactionNotFound
-// 	}
-// 	var transaction domain.TransactionOutput
-// 	err = rows.Scan(
-// 		&transaction.Id,
-// 		&transaction.Title,
-// 		&transaction.Value,
-// 		&transaction.Category,
-// 		&transaction.Condition,
-// 		&transaction.TypeTransaction,
-// 		&transaction.TypePayment,
-// 		&transaction.Descritpion,
-// 		&transaction.CreatedAt,
-// 		&transaction.UpdatedAt)
-// 	if err != nil {
-// 		return domain.TransactionOutput{}, err
-// 	}
+	rowExist := rows.Next()
+	if !rowExist {
+		return domain.TransactionType{}, err
+	}
+	var transaction domain.TransactionType
+	err = rows.Scan(
+		&transaction.Id,
+		&transaction.Title,
+		&transaction.Descritpion)
+	if err != nil {
+		return domain.TransactionType{}, err
+	}
 
-// 	return transaction, nil
-// }
+	return transaction, nil
+}
 
 // func GetTransactionTotal(ctx context.Context) (domain.TransactionTotal, error) {
 // 	var err error

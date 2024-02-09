@@ -21,7 +21,7 @@ func Get(ctx context.Context) (domain.PaymentTypes, error) {
 		t.id, 
 		t.title, 
 		COALESCE(t.description, '')  
-	FROM payment_type t`)
+	FROM golang.payment_type t`)
 	if err != nil {
 		return nil, err
 	}

@@ -8,6 +8,7 @@ import (
 	"personal-finance-api/database"
 	"personal-finance-api/domain"
 	AccountModel "personal-finance-api/models/account"
+	TransactionTypeModel "personal-finance-api/models/transaction_type"
 )
 
 var Db *sql.DB
@@ -39,9 +40,9 @@ func Get(ctx context.Context, typeTransaction string) ([]domain.TransactionOutpu
 		type.title, 
 		t.created_at, 
 		t.updated_at 
-	FROM transaction t
-	LEFT JOIN category c ON t.category_id = c.id
-	LEFT JOIN transaction_type type ON t.type_transaction_id = type.id
+	FROM golang.transaction t
+	LEFT JOIN golang.category c ON t.category_id = c.id
+	LEFT JOIN golang.transaction_type type ON t.type_transaction_id = type.id
 	ORDER BY t.created_at DESC`+conditions, args...)
 	if err != nil {
 		return nil, err
@@ -94,7 +95,8 @@ func Create(ctx context.Context, t domain.TransactionInput) (domain.TransactionO
 	}
 	
 	var newTotal float64
-	if t.TypeTransactionId == 1 {
+	typeTrans, err := TransactionTypeModel.GetById(ctx, t.TypeTransactionId)
+	if typeTrans.Title == "gasto" {
 		newTotal = totalBalance.Balance - t.Value
 	} else {
 		newTotal = totalBalance.Balance + t.Value
@@ -155,11 +157,11 @@ func GetById(ctx context.Context, id int) (domain.TransactionOutput, error) {
 		COALESCE(t.description, ""),
 		t.created_at, 
 		t.updated_at 
-	FROM finance.transaction t
-	LEFT JOIN finance.category c ON t.category_id = c.id
-	LEFT JOIN finance.transaction_type tt ON t.type_transaction_id = tt.id
-	LEFT JOIN finance.payment_type p ON t.type_payment_id = p.id
-	LEFT JOIN finance.condition co ON t.condition_id = co.id
+	FROM golang.transaction t
+	LEFT JOIN golang.category c ON t.category_id = c.id
+	LEFT JOIN golang.transaction_type tt ON t.type_transaction_id = tt.id
+	LEFT JOIN golang.payment_type p ON t.type_payment_id = p.id
+	LEFT JOIN golang.condition co ON t.condition_id = co.id
 	WHERE t.id = ? LIMIT 1`, id)
 	if err != nil {
 		return domain.TransactionOutput{}, err
@@ -199,9 +201,9 @@ func GetTransactionTotal(ctx context.Context) (domain.TransactionTotal, error) {
 
 	rows, err := Db.Query(`
 	SELECT
-	COALESCE(SUM(CASE WHEN t.type_transaction_id = 2 THEN t.value ELSE 0 END), 0) AS total_in,
-	COALESCE(SUM(CASE WHEN t.type_transaction_id = 1 THEN t.value ELSE 0 END), 0) as total_out
-	FROM transaction t`)
+	COALESCE(SUM(CASE WHEN t.type_transaction_id = 3 THEN t.value ELSE 0 END), 0) AS total_in,
+	COALESCE(SUM(CASE WHEN t.type_transaction_id = 4 THEN t.value ELSE 0 END), 0) as total_out
+	FROM golang.transaction t`)
 	if err != nil {
 		return domain.TransactionTotal{}, err
 	}
@@ -231,7 +233,7 @@ func Delete(ctx context.Context, id int) error {
 		return err
 	}
 
-	query := `DELETE FROM users WHERE id = ?`
+	query := `DELETE FROM golang.users WHERE id = ?`
 
 	_, err = Db.ExecContext(ctx, query, id)
 	if err != nil {

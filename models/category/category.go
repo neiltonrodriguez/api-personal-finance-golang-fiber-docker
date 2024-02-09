@@ -21,7 +21,7 @@ func Get(ctx context.Context) (domain.Categorys, error) {
 		c.id, 
 		c.title, 
 		COALESCE(c.description, '')
-	FROM category c`)
+	FROM golang.category c`)
 	if err != nil {
 		return nil, err
 	}

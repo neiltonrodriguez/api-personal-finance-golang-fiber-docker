@@ -21,7 +21,7 @@ func Get(ctx context.Context) (domain.Conditions, error) {
 		id, 
 		title, 
 		COALESCE(description, '')  
-	FROM finance.condition`)
+	FROM golang.condition`)
 	if err != nil {
 		return nil, err
 	}

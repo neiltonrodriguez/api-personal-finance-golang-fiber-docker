@@ -25,7 +25,7 @@ func GetBalanceTotal(ctx context.Context) (domain.BalanceTotal, error) {
 	rows, err := Db.Query(`
 	SELECT 
 		SUM(balance)
-	FROM account a`)
+	FROM golang.account a`)
 	if err != nil {
 		return domain.BalanceTotal{}, err
 	}
@@ -54,7 +54,7 @@ func GetBalanceByAccount(ctx context.Context, id int) (domain.BalanceTotal, erro
 	rows, err := Db.Query(`
 	SELECT 
 		a.balance
-	FROM account a WHERE a.id = ?`,id)
+	FROM golang.account a WHERE a.id = ?`,id)
 	if err != nil {
 		return domain.BalanceTotal{}, err
 	}
@@ -89,9 +89,9 @@ func Get(ctx context.Context) ([]domain.AccountOutput, error) {
 		COALESCE(b.title, ''),  
 		created_at, 
 		updated_at 
-	FROM account a
-	LEFT JOIN type_account t ON a.type_account = t.id
-	LEFT JOIN bank b ON a.bank_id = b.id`)
+	FROM golang.account a
+	LEFT JOIN golang.type_account t ON a.type_account = t.id
+	LEFT JOIN golang.bank b ON a.bank_id = b.id`)
 	if err != nil {
 		return nil, err
 	}
@@ -183,9 +183,9 @@ func GetById(ctx context.Context, id int) (domain.AccountOutput, error) {
 		b.title,  
 		created_at, 
 		updated_at 
-	FROM account a
-	LEFT JOIN type_account t ON a.type_account = t.id
-	LEFT JOIN bank b ON a.bank_id = b.id
+	FROM golang.account a
+	LEFT JOIN golang.type_account t ON a.type_account = t.id
+	LEFT JOIN golang.bank b ON a.bank_id = b.id
 	WHERE a.id = ?`, id)
 	if err != nil {
 		return domain.AccountOutput{}, err
@@ -242,7 +242,7 @@ func Delete(ctx context.Context, id int) error {
 		return err
 	}
 
-	query := `DELETE FROM users WHERE id = ?`
+	query := `DELETE FROM golang.users WHERE id = ?`
 
 	_, err = Db.ExecContext(ctx, query, id)
 	if err != nil {
